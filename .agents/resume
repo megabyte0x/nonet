@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Nothing to reconnect: the repo has no databases or authenticated services.
+set -euo pipefail

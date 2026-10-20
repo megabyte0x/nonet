@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Prepares an Amp orb: installs npm dependencies for the Expo app and the chain scripts.
+set -euo pipefail
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+
+step() {
+  local name="$1"; shift
+  echo "==> $name"
+  local start=$SECONDS
+  "$@"
+  echo "<== $name ($((SECONDS - start))s)"
+}
+
+npm_deps() {
+  # npm install against a committed lockfile is a fast no-op when node_modules
+  # restored from a snapshot already matches; npm ci would wipe and reinstall.
+  (cd "$1" && npm install --no-audit --no-fund --loglevel=error)
+}
+
+node --version
+step "nonet-app-node deps" npm_deps nonet-app-node
+step "scripts deps" npm_deps scripts
